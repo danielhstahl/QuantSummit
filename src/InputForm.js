@@ -87,7 +87,7 @@ export default class InputForm extends Component{
         return(
         <form onSubmit={this.onSubmit}>
             <Row>
-                <Col xs={12} sm={6} md={4} xl={3}>
+                <Col xs={12} >
                     
                     <ErrorTextField 
                         label="Number of Simulations" 
@@ -95,7 +95,7 @@ export default class InputForm extends Component{
                         regex={OnlyPositiveInt}
                         errMsg="Not a positive integer!"/>
                 </Col>
-                <Col xs={12} sm={6} md={4} xl={3}>
+                <Col xs={12} >
                     <ErrorTextField 
                         label="Something Else"
                         regex={OnlyPositiveFloat}
@@ -103,8 +103,11 @@ export default class InputForm extends Component{
                         errMsg="Not a positive number!"
                     />
                 </Col>
-                <Col xs={12} >
+                <Col xs={12} lg={6}>
                     {selectCorrectButton(err, success, waitingForResponse)}
+                </Col>
+                <Col xs={12} lg={6}>
+                    <RaisedButton label="Documentation"/>
                 </Col>
             </Row>      
         </form>
