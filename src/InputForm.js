@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import TextField from 'material-ui/TextField'
 import ErrorTextField from './ErrorTextField'
+import InAppDocumentation from './InAppDocumentation'
 import { Container, Row, Col} from 'react-grid-system'
 const OnlyPositiveInt=/^[1-9]\d*$/
 const OnlyPositiveFloat=/^[+]?([.]\d+|\d+([.]\d+)?)$/
@@ -42,6 +43,7 @@ const selectCorrectButton=(err, success, waitingForResponse)=>{
         return <RaisedButton primary type="submit" label="Submit"/>
     }
 }
+const floatRight={float:'right'};
 export default class InputForm extends Component{
     state={
         numSims:0,
@@ -82,6 +84,9 @@ export default class InputForm extends Component{
             somethingElse:parseFloat(value)
         })
     }
+    shouldComponentUpdate(props, next){
+        return props!==next;
+    }
     render(){
         const {err, success, waitingForResponse}=this.state
         return(
@@ -103,11 +108,9 @@ export default class InputForm extends Component{
                         errMsg="Not a positive number!"
                     />
                 </Col>
-                <Col xs={12} lg={6}>
+                <Col xs={12}>
                     {selectCorrectButton(err, success, waitingForResponse)}
-                </Col>
-                <Col xs={12} lg={6}>
-                    <RaisedButton label="Documentation"/>
+                    <InAppDocumentation style={floatRight}/>
                 </Col>
             </Row>      
         </form>

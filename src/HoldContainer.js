@@ -45,6 +45,9 @@ export default class HoldContainer extends Component{
             
         }, 500)
     }
+    shouldComponentUpdate(props, next){
+        return props!==next;
+    }
     render(){
         return(
             <Container>

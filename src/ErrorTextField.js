@@ -16,9 +16,13 @@ export default class ErrorTextField extends Component{
             return {error:this.props.errMsg, text:value};
         });
     }
+    shouldComponentUpdate(props, next){
+        return props!==next;
+    }
     render(){
         return(
             <TextField 
+                fullWidth={true}
                 value={this.state.text}
                 errorText={this.state.error}
                 floatingLabelText={this.props.label}
