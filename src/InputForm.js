@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import TextField from 'material-ui/TextField'
 import ErrorTextField from './ErrorTextField'
 import InAppDocumentation from './InAppDocumentation'
-import { Container, Row, Col} from 'react-grid-system'
+import {Row, Col} from 'react-grid-system'
 const OnlyPositiveInt=/^[1-9]\d*$/
 const OnlyPositiveFloat=/^[+]?([.]\d+|\d+([.]\d+)?)$/
 const msToWait=1000;
@@ -76,7 +74,7 @@ export default class InputForm extends Component{
     }
     handleNumSim=(value)=>{
         this.setState({
-            numSims:parseInt(value)
+            numSims:parseInt(value, 10)
         })
     }
     handleSomethingElse=(value)=>{
