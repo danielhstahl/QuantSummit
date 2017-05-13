@@ -83,7 +83,7 @@ export default class InputForm extends Component{
         })
     }
     shouldComponentUpdate(nextProps, nextState){
-        return nextProps!==this.props;
+        return nextProps!==this.props||nextState!==this.state;
     }
     render(){
         const {err, success, waitingForResponse}=this.state

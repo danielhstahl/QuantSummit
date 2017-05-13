@@ -24,7 +24,7 @@ export default class InAppDocumentation extends Component{
         })
     }
     shouldComponentUpdate(nextProps, nextState){
-        return nextProps!==this.props;
+        return nextProps!==this.props||nextState!==this.state;
     }
     actions=actions(this.handleClose)
     render(){

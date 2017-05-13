@@ -14,7 +14,7 @@ export default class ErrorTextField extends Component{
         });
     }
     shouldComponentUpdate(nextProps, nextState){
-        return nextProps!==this.props;
+        return nextProps!==this.props||nextState!==this.state;
     }
     render(){
         return(
