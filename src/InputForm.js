@@ -82,8 +82,8 @@ export default class InputForm extends Component{
             somethingElse:parseFloat(value)
         })
     }
-    shouldComponentUpdate(props, next){
-        return props!==next;
+    shouldComponentUpdate(nextProps, nextState){
+        return nextProps!==this.props;
     }
     render(){
         const {err, success, waitingForResponse}=this.state

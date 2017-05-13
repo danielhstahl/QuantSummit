@@ -13,8 +13,8 @@ export default class ErrorTextField extends Component{
             return {error:this.props.errMsg, text:value};
         });
     }
-    shouldComponentUpdate(props, next){
-        return props!==next;
+    shouldComponentUpdate(nextProps, nextState){
+        return nextProps!==this.props;
     }
     render(){
         return(

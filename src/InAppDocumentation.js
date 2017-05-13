@@ -23,8 +23,8 @@ export default class InAppDocumentation extends Component{
             open:false
         })
     }
-    shouldComponentUpdate(props, next){
-        return props!==next;
+    shouldComponentUpdate(nextProps, nextState){
+        return nextProps!==this.props;
     }
     actions=actions(this.handleClose)
     render(){
