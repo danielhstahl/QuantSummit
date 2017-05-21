@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
 const actions = (handleClose)=>[
     <FlatButton
     label="Ok"
@@ -30,7 +31,7 @@ export default class InAppDocumentation extends Component{
     render(){
         
         return(
-        <div style={this.props.style}>
+        <div style={this.props.style?this.props.style:null}>
         <RaisedButton label="Documentation" onTouchTap={this.handleOpen} />
         <Dialog
           title="Documentation"
@@ -45,4 +46,7 @@ export default class InAppDocumentation extends Component{
     }
 
 
+}
+InAppDocumentation.propTypes={
+    style:PropTypes.object
 }

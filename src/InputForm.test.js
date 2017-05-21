@@ -7,7 +7,7 @@ import InputForm from './InputForm'
 //injectTapEventPlugin();
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<MuiThemeProvider><InputForm /></MuiThemeProvider>, div);
+  ReactDOM.render(<MuiThemeProvider><InputForm handleSubmit={(val)=>{}}/></MuiThemeProvider>, div);
 });
 
 //it('renders when waiting')

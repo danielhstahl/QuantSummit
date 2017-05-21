@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField'
+import PropTypes from 'prop-types';
 export default class ErrorTextField extends Component{
     state={
         error:"",
@@ -27,4 +28,10 @@ export default class ErrorTextField extends Component{
             />
         )
     }
+}
+ErrorTextField.propTypes={
+    label:PropTypes.string.isRequired,
+    regex:PropTypes.instanceOf(RegExp).isRequired,
+    errMsg:PropTypes.string.isRequired,
+    onChange:PropTypes.func.isRequired
 }

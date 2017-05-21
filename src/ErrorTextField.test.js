@@ -8,5 +8,5 @@ import ErrorTextField from './ErrorTextField'
 it('renders without crashing', () => {
   const div = document.createElement('div');
   //injectTapEventPlugin();
-  ReactDOM.render(<MuiThemeProvider><ErrorTextField /></MuiThemeProvider>, div);
+  ReactDOM.render(<MuiThemeProvider><ErrorTextField label='label' regex={/stuff/g} errMsg="error" onChange={()=>{}} /></MuiThemeProvider>, div);
 });

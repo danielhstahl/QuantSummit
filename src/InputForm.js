@@ -3,6 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import ErrorTextField from './ErrorTextField'
 import InAppDocumentation from './InAppDocumentation'
+import PropTypes from 'prop-types'
 import {Row, Col} from 'react-grid-system'
 const OnlyPositiveInt=/^[1-9]\d*$/
 const OnlyPositiveFloat=/^[+]?([.]\d+|\d+([.]\d+)?)$/
@@ -96,7 +97,8 @@ export default class InputForm extends Component{
                         label="Number of Simulations" 
                         onChange={this.handleNumSim} 
                         regex={OnlyPositiveInt}
-                        errMsg="Not a positive integer!"/>
+                        errMsg="Not a positive integer!"
+                    />
                 </Col>
                 <Col xs={12} >
                     <ErrorTextField 
@@ -115,4 +117,7 @@ export default class InputForm extends Component{
         )
 
     }
+}
+InputForm.propTypes={
+    handleSubmit:PropTypes.func.isRequired
 }
