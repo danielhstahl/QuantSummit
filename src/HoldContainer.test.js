@@ -6,5 +6,5 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import HoldContainer from './ErrorTextField'
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<MuiThemeProvider><HoldContainer /></MuiThemeProvider>, div);
+  ReactDOM.render(<MuiThemeProvider><HoldContainer/></MuiThemeProvider>, div);
 });

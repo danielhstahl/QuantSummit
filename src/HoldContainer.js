@@ -24,7 +24,6 @@ const config={
       data:[[.5, .7], [.6, .9], [1, .4]]
     }
   ]
-
 }
 const getData=()=>{
     return [[.5, 1.2], [.6, .9], [1, .9]]
@@ -33,7 +32,6 @@ export default class HoldContainer extends Component{
     state={
         config:config
     }
-    
     handleSubmit=(cb)=>{
         //fake ajax call for now
         const data=getData();
