@@ -10,5 +10,3 @@ it('renders without crashing', () => {
   //injectTapEventPlugin();
   ReactDOM.render(<MuiThemeProvider><ErrorTextField /></MuiThemeProvider>, div);
 });
-
-//it('renders when waiting')
