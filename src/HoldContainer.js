@@ -1,47 +1,44 @@
 import React, {Component} from 'react';
-import ReactHighcharts from 'react-highcharts-update'
+import Histogram from './Histogram'
+import CDF from './CDF'
+import Contour from './Contour'
 import InputForm from './InputForm'
 import { Container, Row, Col} from 'react-grid-system'
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-const muiTheme=getMuiTheme(lightBaseTheme)
 
-const config={
-  chart:{
-    type:'column'
-  },
-  colors:[
-    muiTheme.palette.accent1Color
-  ],
-  title:{
-    text:'my chart'
-  },
-  credits:{
-    enabled:false
-  },
-  series:[
-    {
-      data:[[.5, .7], [.6, .9], [1, .4]]
-    }
-  ]
-}
-const getData=()=>{
-    return [[.5, 1.2], [.6, .9], [1, .9]]
-}
+/*<Col xs={12} sm={4}>
+    <InputForm handleSubmit={this.handleSubmit} onEnd={this.onEnd}/>
+</Col>*/
+const checkBothTrue=(one, two)=>one&&two
 export default class HoldContainer extends Component{
     state={
-        config:config
+        xVal:0,
+        yVal:0,
     }
-    handleSubmit=(cb)=>{
-        //fake ajax call for now
-        const data=getData();
-        setTimeout(()=>{
-            cb(null, data)
-            this.setState({
-                config:Object.assign({}, config, {series:[{data}]})
-            })
-            
-        }, 500)
+    /*callback=null
+    onEnd=(cb)=>{
+        this.callback=cb
+    }
+    hasHistFinished=false
+    hasCDFFinished=false*/
+    /*setBothFinished=()=>{
+        const isFinished=checkBothTrue(this.hasHistFinished, this.hasCDFFinished)
+        isFinished?this.callback?this.callback(null, ""):null:null
+    }
+    histogramResponse=()=>{
+        this.hasHistFinished=true
+        this.setBothFinished()
+    }
+    cdfResponse=()=>{
+        this.hasCDFFinished=true
+        this.setBothFinished()
+    }*/
+    handleSubmit=(xVal, yVal)=>{
+        this.setState({xVal, yVal})
+        //this.hasHistFinished=false
+        //this.hasCDFFinished=false
+    }
+    onContourClick=(xVal, yVal)=>{
+        this.setState({xVal, yVal})
     }
     shouldComponentUpdate(nextProps, nextState){
         return nextProps!==this.props||nextState!==this.state;
@@ -50,12 +47,26 @@ export default class HoldContainer extends Component{
         return(
             <Container>
                 <Row>
-                    <Col xs={12} sm={4}>
-                        <InputForm handleSubmit={this.handleSubmit}/>
+                    <Col xs={12} sm={6}>
+                        <Contour onClick={this.onContourClick}/>
                     </Col>
-                    <Col xs={12} sm={8}>
-                        <ReactHighcharts config={this.state.config}/>
+                    <Col xs={12} sm={6}>
+                        <Histogram 
+                            xVal={this.state.xVal} 
+                            yVal={this.state.yVal}
+                            onResponse={this.histogramResponse}
+                        />
                     </Col>
+                </Row>
+                <Row>
+                    <Col xs={12} sm={6}>
+                        <CDF 
+                            xVal={this.state.xVal} 
+                            yVal={this.state.yVal}
+                            onResponse={this.cdfResponse}
+                        />
+                    </Col>
+                   
                 </Row>
             </Container>
 

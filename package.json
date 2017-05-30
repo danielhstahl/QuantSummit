@@ -2,6 +2,7 @@
   "name": "QuantSummit",
   "version": "0.0.1",
   "private": true,
+  "proxy": "http://localhost:8080",
   "homepage": "https://phillyfan1138.github.io/QuantSummit",
   "devDependencies": {
     "enzyme": "^2.8.2",

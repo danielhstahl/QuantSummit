@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import {Row, Col} from 'react-grid-system'
 const OnlyPositiveInt=/^[1-9]\d*$/
 const OnlyPositiveFloat=/^[+]?([.]\d+|\d+([.]\d+)?)$/
+const OnlyFloat=/[-.0-9]+/
 const msToWait=1000;
 const cb=(msToWait, updateErr, updateSuccess, updateResponse)=>{
   return (err, res)=>{
@@ -45,8 +46,8 @@ const selectCorrectButton=(err, success, waitingForResponse)=>{
 const floatRight={float:'right'};
 export default class InputForm extends Component{
     state={
-        numSims:0,
-        somethingElse:.5,
+        xVal:0,
+        yVal:0,
         err:"",
         success:"",
         waitingForResponse:false
@@ -68,20 +69,23 @@ export default class InputForm extends Component{
     }
     onSubmit=(e)=>{
         e.preventDefault()
-        this.setState((prev, curr)=>{
-            this.props.handleSubmit(cb(msToWait, this.updateErr, this.updateSuccess, this.updateResponse))
+        const {xVal, yVal}=this.state
+        this.props.handleSubmit(xVal, yVal)
+        this.setState((prev, props)=>{
+            props.onEnd(cb(msToWait, this.updateErr, this.updateSuccess, this.updateResponse))
             return {waitingForResponse:true}
         })
     }
-    handleNumSim=(value)=>{
+    handleVal=(key, value)=>{
         this.setState({
-            numSims:parseInt(value, 10)
+            [key]:parseFloat(value)
         })
     }
-    handleSomethingElse=(value)=>{
-        this.setState({
-            somethingElse:parseFloat(value)
-        })
+    handleXVal=(value)=>{
+        this.handleVal('xVal', value)
+    }
+    handleYVal=(value)=>{
+        this.handleVal('yVal', value)
     }
     shouldComponentUpdate(nextProps, nextState){
         return nextProps!==this.props||nextState!==this.state;
@@ -91,21 +95,20 @@ export default class InputForm extends Component{
         return(
         <form onSubmit={this.onSubmit}>
             <Row>
-                <Col xs={12} >
-                    
+                <Col xs={12}>
                     <ErrorTextField 
-                        label="Number of Simulations" 
-                        onChange={this.handleNumSim} 
-                        regex={OnlyPositiveInt}
-                        errMsg="Not a positive integer!"
+                        label="X Value" 
+                        onChange={this.handleXVal} 
+                        regex={OnlyFloat}
+                        errMsg="Not a float!"
                     />
                 </Col>
                 <Col xs={12} >
                     <ErrorTextField 
-                        label="Something Else"
-                        regex={OnlyPositiveFloat}
-                        onChange={this.handleSomethingElse}
-                        errMsg="Not a positive number!"
+                        label="Y Value"
+                        regex={OnlyFloat}
+                        onChange={this.handleYVal}
+                        errMsg="Not a float!"
                     />
                 </Col>
                 <Col xs={12}>
