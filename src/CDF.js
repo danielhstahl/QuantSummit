@@ -26,7 +26,8 @@ const cdfConfig={
 
 const cdfSeries={
     name: 'CDF',
-    type: 'line'
+    type: 'line',
+    showInLegend:false
 }
 const getPriorIndex=(rowIndex, colIndex, arr)=>rowIndex===0?0:arr[rowIndex-1][colIndex]
 

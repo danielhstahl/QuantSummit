@@ -76,17 +76,12 @@ export default class InputForm extends Component{
             return {waitingForResponse:true}
         })
     }
-    handleVal=(key, value)=>{
+    /*handleVal=(key, value)=>{
         this.setState({
             [key]:parseFloat(value)
         })
-    }
-    handleXVal=(value)=>{
-        this.handleVal('xVal', value)
-    }
-    handleYVal=(value)=>{
-        this.handleVal('yVal', value)
-    }
+    }*/
+
     shouldComponentUpdate(nextProps, nextState){
         return nextProps!==this.props||nextState!==this.state;
     }
@@ -95,20 +90,12 @@ export default class InputForm extends Component{
         return(
         <form onSubmit={this.onSubmit}>
             <Row>
-                <Col xs={12}>
-                    <ErrorTextField 
-                        label="X Value" 
-                        onChange={this.handleXVal} 
-                        regex={OnlyFloat}
-                        errMsg="Not a float!"
-                    />
-                </Col>
                 <Col xs={12} >
                     <ErrorTextField 
-                        label="Y Value"
-                        regex={OnlyFloat}
+                        label="Number of Simulations"
+                        regex={OnlyPositiveInt}
                         onChange={this.handleYVal}
-                        errMsg="Not a float!"
+                        errMsg="Not a positive integer!"
                     />
                 </Col>
                 <Col xs={12}>

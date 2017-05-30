@@ -8,17 +8,27 @@ import axios from 'axios'
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import paramify from './paramify'
 import heatmap  from 'highcharts/modules/heatmap'
-import heatcontour from './highcharts-contour'
 import {extremaArray} from './extrema'
+import {
+  pinkA200, //accent1Color, lightest
+  pink300,
+  purple200,
+  amber300,
+  lime300,
+  cyan300,
+  cyan500, //primary1color, deepest
+} from 'material-ui/styles/colors';
+
+
+
 heatmap(ReactHighcharts.Highcharts)
-heatcontour(ReactHighcharts.Highcharts)
 const muiTheme=getMuiTheme(lightBaseTheme)
 const contourConfig={
   chart:{
     type:'heatmap'
   },
   title:{
-    text:'Contour'
+    text:null
   },
   colorAxis: {
       //stops:[]
@@ -41,14 +51,18 @@ const configureData=(x, y, z)=>{
     }
     , [])
 }
+const stops=[
+    [0, cyan500],
+    [0.1, cyan300],
+    [0.25, lime300],
+    [0.4, amber300],
+    [0.55, purple200],
+    [0.75, pink300],
+    [0.9, pinkA200]
+]
 const onData=(config, data, onClick)=>{
-    const stops=[
-        [0, '#3060cf'],
-        [0.5, '#fffbbc'],
-        [0.9, '#c4463a']
-    ]
     const extremaZ=extremaArray(data.losses)
-    const newConfig=Object.assign({}, contourConfig, config, 
+    return Object.assign({}, contourConfig, config, 
         {
             series:[
                 Object.assign({}, 
@@ -89,8 +103,6 @@ const onData=(config, data, onClick)=>{
                 }
             },
         })
-    console.log(newConfig)
-    return newConfig
 }
 export default (props)=>(
     <GenericChart  {...props} endpoint='/getcontour' onData={(config, data)=>onData(config, data, props.onClick)} />

@@ -32,11 +32,15 @@ export default class GenericChart extends Component{
     shouldComponentUpdate(nextProps, nextState){
         const {xVal, yVal}=nextProps
         if(this.props.xVal!==xVal||this.props.yVal!==yVal){
+            console.log("new xVal")
             const {xVal, yVal, endpoint}=nextProps
             axios(endpoint, paramify({xVal, yVal})).then(this.onData).catch(this.onError)
-            //this.setState({isFetchingData:true})
+            this.state.isFetchingData=true
+            return true
         }
-        return nextState!==this.state
+        else{
+            return nextState!==this.state
+        }
     }
     render(){
         return this.state.isFetchingData||!this.state.config?<CircularProgress/>:<ReactHighcharts config={this.state.config}/>

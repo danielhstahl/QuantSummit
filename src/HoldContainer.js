@@ -4,11 +4,14 @@ import CDF from './CDF'
 import Contour from './Contour'
 import InputForm from './InputForm'
 import { Container, Row, Col} from 'react-grid-system'
-
+import InAppDocumentation from './InAppDocumentation'
+import AppBar from 'material-ui/AppBar'
 /*<Col xs={12} sm={4}>
     <InputForm handleSubmit={this.handleSubmit} onEnd={this.onEnd}/>
 </Col>*/
-const checkBothTrue=(one, two)=>one&&two
+//const checkBothTrue=(one, two)=>one&&two
+const floatRight={float:'right', margin: 'auto'};
+const titleStyle={color: "#333333", fontSize: "18px", textAlign:"center", marginTop:10, fontFamily:"Lucida Sans Unicode"}
 export default class HoldContainer extends Component{
     state={
         xVal:0,
@@ -44,12 +47,21 @@ export default class HoldContainer extends Component{
         return nextProps!==this.props||nextState!==this.state;
     }
     render(){
+        const {xVal, yVal}=this.state
         return(
+        <div>
+            <AppBar title="Quant Summit Demo" icon>
+                <InAppDocumentation style={floatRight}/>
+            </AppBar>
             <Container>
                 <Row>
-                    <Col xs={12} sm={6}>
+                    <Col xs={12} sm={12}>
+                        <div style={titleStyle}>{xVal===0?'Click on the map to select values':`Selected x:${xVal}, y:${yVal}`}</div>
                         <Contour onClick={this.onContourClick}/>
                     </Col>
+                    
+                </Row>
+                <Row>
                     <Col xs={12} sm={6}>
                         <Histogram 
                             xVal={this.state.xVal} 
@@ -57,8 +69,6 @@ export default class HoldContainer extends Component{
                             onResponse={this.histogramResponse}
                         />
                     </Col>
-                </Row>
-                <Row>
                     <Col xs={12} sm={6}>
                         <CDF 
                             xVal={this.state.xVal} 
@@ -66,10 +76,10 @@ export default class HoldContainer extends Component{
                             onResponse={this.cdfResponse}
                         />
                     </Col>
-                   
+                  
                 </Row>
             </Container>
-
+        </div>
         )
     }
 
