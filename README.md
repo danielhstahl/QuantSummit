@@ -6,4 +6,4 @@ This project is part of a demo for the Quant Summit.  The purpose of this demo i
 * How even complex models can provide real time analytics with the right framework and hardware. 
 * How to incorporate documentation into the process.
 
-To run: type either `npm run server` or `python MC_GUI.py`
+To run: type either `npm run server` or `python MC_GUI.py` 
