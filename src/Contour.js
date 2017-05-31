@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import d3Contour from 'd3-contour'
 import ReactHighcharts from 'react-highcharts-update'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import CircularProgress from 'material-ui/CircularProgress'

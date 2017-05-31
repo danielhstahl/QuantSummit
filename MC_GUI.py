@@ -11,13 +11,8 @@ import os
 import matplotlib.pyplot as plt
 import numba
 
-#from bottle import Bottle, route, run, template, request,  get, static_file
+from bottle import route, run, template, request,  get, static_file
 
-from flask import Flask
-from flask import send_from_directory
-from flask_restful import Resource, Api, reqparse
-app = Flask(__name__, static_url_path='')
-api = Api(app)
 # In[ ]:
 
 #### Header area defining functions and classes ####
@@ -229,67 +224,39 @@ def importance_sample(selectedPoint, sigma = 1, size = 100):
     return randomPoints, out
 
 
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='build/static')
 
+@route('/')
+def serve_html():
+    return static_file('index.html', root='build')
 
+@route('/getcontour')
+def contour():
+    return {'X':X.tolist(),'Y':Y.tolist(), 'losses':losses.tolist()}
+@route('/conditional')
+def conditional():
+    global sysRetail, sysWholesale
+    histSize, histBins = 100, 10;
+    my_dict=request.query.decode()
+    if my_dict.xdata and my_dict.ydata:
+        selectedPoint = {'Retail': my_dict.xdata, 'Wholesale': my_dict.ydata}    
+    else:
+        selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
+    selectedPointNP = np.array([[selectedPoint['Retail'], selectedPoint['Wholesale']]]);
+    return {'conditional':positionsBook.cond_random_loss_rate(selectedPointNP, size = histSize)[0].tolist()}
 
-# @app.route('/static/css/<filename:path>')
-# def css_static(filename):
-#     return static_file(filename, root='build/static/css')
+@route('/user_importance_sampling')
+def user_importance_sampling():
+    global sysRetail, sysWholesale
+    sigma = .5
+    my_dict=request.query.decode()
+    if my_dict.xdata and my_dict.ydata:
+        selectedPoint = {'Retail': my_dict.xdata, 'Wholesale': my_dict.ydata}    
+    else:
+        selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
+    rpoints, rlosses = importance_sample(selectedPoint, sigma = sigma) 
+    return {'cdf': rlosses, 'points':rpoints.tolist()}
 
-# @app.route('/static/js/<filename:path>')
-# def js_static(filename):
-#     return static_file(filename, root='build/static/js')
-@app.route('/static/js/<path:path>')
-def send_js(path):
-    return send_from_directory(os.path.join('build', 'static', 'js').replace('\\','/'), path)
-
-@app.route('/static/css/<path:path>')
-def send_css(path):
-    return send_from_directory(os.path.join( 'build', 'static', 'css').replace('\\','/'), path)
-
-@app.route('/')
-def html_static():
-    #print(os.path.join('.', 'build', 'index.html').replace('\\','/'))
-    return send_from_directory(os.path.join('build').replace('\\','/'), 'index.html') 
-
-
-class contour(Resource):
-    def get(self):
-        return {'X':X.tolist(),'Y':Y.tolist(), 'losses':losses.tolist()}
-
-class conditional(Resource):
-    def get(self):
-        global sysRetail, sysWholesale
-        histSize, histBins = 100, 10;
-        #my_dict=request.query.decode()
-        my_dict=reqparse.RequestParser().parse_args
-        if my_dict.xdata and my_dict.ydata:
-            selectedPoint = {'Retail': my_dict.xdata, 'Wholesale': my_dict.ydata}    
-        else:
-            selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
-        selectedPointNP = np.array([[selectedPoint['Retail'], selectedPoint['Wholesale']]]);
-        return {'conditional':positionsBook.cond_random_loss_rate(selectedPointNP, size = histSize)[0].tolist()}
-
-class user_importance_sampling(Resource):
-    def get(self):
-        global sysRetail, sysWholesale
-        sigma = .5
-       # my_dict=request.query.decode()
-        my_dict=reqparse.RequestParser().parse_args
-        if my_dict.xdata and my_dict.ydata:
-            selectedPoint = {'Retail': my_dict.xdata, 'Wholesale': my_dict.ydata}    
-        else:
-            selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
-        rpoints, rlosses = importance_sample(selectedPoint, sigma = sigma) 
-        return {'cdf': rlosses, 'points':rpoints.tolist()}
-        
-api.add_resource(contour, '/getcontour')
-api.add_resource(conditional, '/conditional')
-api.add_resource(user_importance_sampling, '/user_importance_sampling')
-      
-
-   
-
-if __name__ == '__main__':  # pragma: no cover
-    app.run(port=8080)
-
+run(host='0.0.0.0', port=8080)
