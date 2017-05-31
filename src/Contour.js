@@ -8,6 +8,8 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import paramify from './paramify'
 import heatmap  from 'highcharts/modules/heatmap'
 import {extremaArray} from './extrema'
+import contourmap from './highcharts-contour'
+
 import {
   pinkA200, //accent1Color, lightest
   pink300,
@@ -21,10 +23,13 @@ import {
 
 
 heatmap(ReactHighcharts.Highcharts)
+contourmap(ReactHighcharts.Highcharts)
 const muiTheme=getMuiTheme(lightBaseTheme)
 const contourConfig={
   chart:{
-    type:'heatmap'
+    type:'contour',
+    inverted: true,
+    height: 600
   },
   title:{
     text:null
@@ -34,6 +39,10 @@ const contourConfig={
     },
   credits:{
     enabled:false
+  },
+  legend:{
+    /*width:400,
+    align:'left'*/
   },
   series:[
   ]
@@ -50,6 +59,15 @@ const configureData=(x, y, z)=>{
     }
     , [])
 }
+/*const numTones=16
+const numColors=255
+const stops=[...new Array(numTones)].map((_, index)=>{
+    const tone=Math.round(numColors-numColors*index/(numTones-1))
+    return [index/numTones, `rgb(${tone}, ${tone}, ${tone})`]
+})
+console.log(stops)
+*/
+
 const stops=[
     [0, cyan500],
     [0.1, cyan300],
@@ -73,32 +91,34 @@ const onData=(config, data, onClick)=>{
                         click:function(e){
                             onClick(e.point.x/multiplyBy, e.point.y/multiplyBy)
                         }
-                    }
+                    },
+                    grid_width: data.X.length,
+                    showContours: true
                 })
             ], 
             colorAxis:{
                 min:extremaZ.min, 
                 max:extremaZ.max,
-                stops
+                stops,
+                tickInterval: .02,
+                labels: {
+                    step: 3,
+                    enabled: true,
+                    formatter: function () {
+                        return this.value;    
+                    }
+                } 
             }, 
             xAxis:{
-                labels:{
-                    formatter: function () {    
-                        return this.value/multiplyBy
-                    }
-                }
+                visible:false
                 
             }, 
             yAxis:{
-               labels:{
-                    formatter: function () {    
-                        return this.value/multiplyBy
-                    }
-                }
+                visible:false
             },
             tooltip: {
                 formatter: function () {
-                    return this.point.value 
+                    return `Macro Factor 1: ${this.x/multiplyBy}<br/> Macro Factor 2:${this.y/multiplyBy} <br/> Conditional Expected Loss Rate:${this.point.value}`
                 }
             },
         })

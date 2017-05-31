@@ -31,21 +31,19 @@ export default class InAppDocumentation extends Component{
     render(){
         
         return(
-        <div style={this.props.style?this.props.style:null}>
-        <RaisedButton label="Documentation" onTouchTap={this.handleOpen} />
-        <Dialog
-          title="Documentation"
-          actions={this.actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-        >
-          This app calls a complicated model.  Yet it still provides real time analytics and is easy to use.
-        </Dialog>
-      </div>)
+        <RaisedButton label="Documentation" onTouchTap={this.handleOpen} style={this.props.style?this.props.style:null}>
+            <Dialog
+            title="Documentation"
+            actions={this.actions}
+            modal={false}
+            open={this.state.open}
+            onRequestClose={this.handleClose}
+            >
+            This app calls a computationally complex model.  Yet it still provides real time analytics and is easy to use.
+            </Dialog>
+        </RaisedButton>
+        )
     }
-
-
 }
 InAppDocumentation.propTypes={
     style:PropTypes.object
