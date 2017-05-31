@@ -1,3 +1,4 @@
+import extremaCalc from './extrema'
 export const iterateObj=(obj, key)=>obj[key]?Object.assign({}, obj, {[key]:obj[key]+1}):Object.assign({}, obj, {[key]:1})
 export const histogram=(data, step=10)=>{
     const extrema=extremaCalc(data)
