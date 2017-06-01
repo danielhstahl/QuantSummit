@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ReactHighcharts from 'react-highcharts-update'
+import ReactHighcharts from 'react-highcharts'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import CircularProgress from 'material-ui/CircularProgress'
 import GenericChart from './GenericChart'
@@ -41,16 +41,29 @@ const contourConfig={
     enabled:false
   },
   legend:{
-    /*width:400,
-    align:'left'*/
   },
   series:[
+    {
+        name:'myContour', 
+    },
+    {
+        name:'points',
+        type:'scatter',
+        marker:{
+            radius:4
+        }
+    },
+    {
+        name:'selected point',
+        type:'scatter',
+        marker:{
+            radius:7
+        }
+    }
   ]
 }
 const multiplyBy=10
-const contourSeries={
-    name: "myContour",
-}
+
 const configureData=(x, y, z)=>{
     return x.reduce((aggr, curr, rowIndex)=>{
         return aggr.concat(curr.map((col, colIndex)=>{
@@ -58,6 +71,11 @@ const configureData=(x, y, z)=>{
         }))
     }
     , [])
+}
+const configurePoints=(points)=>{
+    return points.map(point=>{
+        return point.map(elem=>Math.floor(elem*multiplyBy))
+    })
 }
 /*const numTones=16
 const numColors=255
@@ -77,13 +95,13 @@ const stops=[
     [0.75, pink300],
     [0.9, pinkA200]
 ]
-const onData=(config, data, onClick)=>{
+const getContourConfig=(config, data, onClick)=>{
     const extremaZ=extremaArray(data.losses)
     return Object.assign({}, contourConfig, config, 
         {
             series:[
                 Object.assign({}, 
-                contourSeries, 
+                config?config.series[0]:contourConfig.series[0], 
                 {
                     borderWidth:0,
                     data:configureData(data.X, data.Y, data.losses), 
@@ -94,7 +112,9 @@ const onData=(config, data, onClick)=>{
                     },
                     grid_width: data.X.length,
                     showContours: true
-                })
+                }),
+                config?config.series[1]:contourConfig.series[1],
+                config?config.series[2]:contourConfig.series[2]
             ], 
             colorAxis:{
                 min:extremaZ.min, 
@@ -123,6 +143,77 @@ const onData=(config, data, onClick)=>{
             },
         })
 }
-export default (props)=>(
-    <GenericChart  {...props} endpoint='/getcontour' onData={(config, data)=>onData(config, data, props.onClick)} />
-)
+export const getScatterConfig=(points, contourConfig)=>{
+    return Object.assign({}, contourConfig, {
+        series:[contourConfig.series[0],  Object.assign({}, contourConfig.series[1], {
+            data:configurePoints(points),
+        }), contourConfig.series[2]]
+    })
+}
+export const getXandYPoint=(point, contourConfig)=>{
+    return Object.assign({}, contourConfig, {
+        series:[contourConfig.series[0], contourConfig.series[1], Object.assign({}, contourConfig.series[2], {
+            data:configurePoints(point)
+        })]
+    })
+}
+export const onReceiveContourData=(prevState, props, data)=>{
+    const {config}=prevState
+    const contourConfig=getContourConfig(config, data, props.onClick)
+    if(props.points&&props.xVal){
+        return {
+            config:getXandYPoint([[props.xVal, props.yVal]], getScatterConfig(props.points, contourConfig))
+        }
+    }
+    else if(props.point){
+        return {
+            config:getScatterConfig(props.points, contourConfig)
+        }
+    }
+    else if(props.xVal){
+        return {
+            config:getXandYPoint([[props.xVal, props.yVal]], contourConfig)
+        }
+    }
+    else{
+        return {config:contourConfig}
+    }
+}
+export default class Contour extends Component {
+    state={
+        config:null
+    }
+    chart=null
+    afterRender = (chart) => { 
+        this.chart=chart
+    };
+
+    componentWillMount(){
+        
+        axios('/getcontour').then((res)=>{
+            this.setState((prev, props)=>{
+                return onReceiveContourData(prev, props, res.data)
+            })
+        }).catch((err)=>console.log(err))
+    }
+    componentWillReceiveProps(nextProps){
+        if(this.state.config){
+            if(nextProps.points!==this.props.points){
+                this.chart.series[1].setData(configurePoints(nextProps.points));
+            }
+            if(nextProps.xVal!==this.props.xVal||nextProps.yVal!==this.props.yVal){
+                //console.log("got here")
+                this.chart.series[2].setData(configurePoints([[nextProps.xVal, nextProps.yVal]]));
+            }
+        }
+    }
+    shouldComponentUpdate(nextProps, nextState){
+        return nextState!==this.state
+    }
+    render(){
+        return this.state.config?<ReactHighcharts callback={this.afterRender} isPureConfig config={this.state.config}/>:<CircularProgress/>
+    }
+    
+
+}
+

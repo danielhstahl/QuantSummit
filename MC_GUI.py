@@ -245,7 +245,7 @@ def conditional():
     else:
         selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
     selectedPointNP = np.array([[selectedPoint['Retail'], selectedPoint['Wholesale']]]);
-    return {'conditional':positionsBook.cond_random_loss_rate(selectedPointNP, size = histSize)[0].tolist()}
+    return {'conditional':positionsBook.cond_random_loss_rate(selectedPointNP, size = histSize)[0].tolist(), 'selectedPoint':selectedPoint}
 
 @route('/user_importance_sampling')
 def user_importance_sampling():
@@ -257,6 +257,6 @@ def user_importance_sampling():
     else:
         selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
     rpoints, rlosses = importance_sample(selectedPoint, sigma = sigma) 
-    return {'cdf': rlosses, 'points':rpoints.tolist()}
+    return {'cdf': rlosses, 'points':rpoints.tolist(), 'selectedPoint':selectedPoint}
 
 run(host='0.0.0.0', port=8080)

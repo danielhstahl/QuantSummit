@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactHighcharts from 'react-highcharts-update'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import CDF from './CDF'
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -12,7 +11,8 @@ const muiTheme=getMuiTheme(lightBaseTheme)
 
 const histConfig={
   chart:{
-    type:'column'
+    type:'column',
+    height:300
   },
   colors:[
     muiTheme.palette.accent1Color

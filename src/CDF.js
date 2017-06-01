@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactHighcharts from 'react-highcharts-update'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import CDF from './CDF'
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -11,6 +10,9 @@ const muiTheme=getMuiTheme(lightBaseTheme)
 
 
 const cdfConfig={
+    chart:{
+        height: 300
+    },
     colors:[
         muiTheme.palette.accent1Color
     ],
@@ -36,7 +38,6 @@ const onData=(config, data)=>{
     const cumSumData=data.cdf.reduce((aggr, curr, index)=>{
         return aggr.concat([[curr[0], curr[secondIndex]+getPriorIndex(index, secondIndex, aggr)]])
     }, [])
-    //console.log(cumSumData)
     return Object.assign({}, cdfConfig, config, {series:[Object.assign({}, cdfSeries, {data:cumSumData})]})
 }
 export default (props)=>(
