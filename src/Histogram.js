@@ -12,10 +12,10 @@ const muiTheme=getMuiTheme(lightBaseTheme)
 const histConfig={
   chart:{
     type:'column',
-    height:300
+    height:250
   },
   colors:[
-    muiTheme.palette.accent1Color
+    "greenyellow"
   ],
   title:{
     text:'Conditional Distribution'
@@ -23,8 +23,7 @@ const histConfig={
   credits:{
     enabled:false
   },
-  series:[
-  ]
+  series:[]
 }
 
 const histoSeries={

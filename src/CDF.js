@@ -8,22 +8,24 @@ import PropTypes from 'prop-types'
 
 const muiTheme=getMuiTheme(lightBaseTheme)
 
-
 const cdfConfig={
     chart:{
-        height: 300
+        height: 250
     },
     colors:[
-        muiTheme.palette.accent1Color
+        "greenyellow"
     ],
     title:{
-        text:'CDF'
+        text:'Unconditional Cumulative Distribution'
     },
     credits:{
        enabled:false
     },
     series:[
-    ]
+    ],
+    yAxis:{
+        max:1
+    }
 }
 
 const cdfSeries={
@@ -40,6 +42,7 @@ const onData=(config, data)=>{
     }, [])
     return Object.assign({}, cdfConfig, config, {series:[Object.assign({}, cdfSeries, {data:cumSumData})]})
 }
+
 export default (props)=>(
     <GenericChart {...props} endpoint='/user_importance_sampling' onData={onData} />
 )

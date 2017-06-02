@@ -9,7 +9,6 @@ import paramify from './paramify'
 import heatmap  from 'highcharts/modules/heatmap'
 import {extremaArray} from './extrema'
 import contourmap from './highcharts-contour'
-
 import {
   pinkA200, //accent1Color, lightest
   pink300,
@@ -28,8 +27,9 @@ const muiTheme=getMuiTheme(lightBaseTheme)
 const contourConfig={
   chart:{
     type:'contour',
-    inverted: true,
-    height: 600
+    //inverted: true,
+    height: 350,
+    margin: [-40, 10, 25, 10]
   },
   title:{
     text:null
