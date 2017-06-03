@@ -22,14 +22,15 @@ import {
 
 
 heatmap(ReactHighcharts.Highcharts)
-contourmap(ReactHighcharts.Highcharts)
+//contourmap(ReactHighcharts.Highcharts)
 const muiTheme=getMuiTheme(lightBaseTheme)
 const contourConfig={
   chart:{
-    type:'contour',
+    type:'heatmap',
+    //type:'contour',
     //inverted: true,
     height: 350,
-    margin: [-40, 10, 25, 10]
+    margin: [10, 10, 40, 10]
   },
   title:{
     text:null
@@ -202,7 +203,6 @@ export default class Contour extends Component {
                 this.chart.series[1].setData(configurePoints(nextProps.points));
             }
             if(nextProps.xVal!==this.props.xVal||nextProps.yVal!==this.props.yVal){
-                //console.log("got here")
                 this.chart.series[2].setData(configurePoints([[nextProps.xVal, nextProps.yVal]]));
             }
         }
