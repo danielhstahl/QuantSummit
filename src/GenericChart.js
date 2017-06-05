@@ -16,8 +16,10 @@ export default class GenericChart extends Component{
         this.chart=chart
     };
     componentWillMount(){
-        const {endpoint}=this.props
-        axios(endpoint).then(this.onData).catch(this.onError)
+        const {endpoint, xVal, yVal}=this.props
+        //console.log(xVal)
+        //console.log(yVal)
+        axios.get(endpoint).then(this.onData).catch(this.onError)
     }
     onError=(err)=>console.log(err)
     /*componentWillUpdate(){
@@ -38,7 +40,7 @@ export default class GenericChart extends Component{
         if(this.props.xVal){//remove first "real" xVal from rerendering
             if(this.props.xVal!==xVal||this.props.yVal!==yVal){
                 const {xVal, yVal, endpoint}=nextProps
-                axios(endpoint, paramify({xVal, yVal})).then(this.onData).catch(this.onError)
+                axios.get(endpoint, paramify({xdata:xVal, ydata:yVal})).then(this.onData).catch(this.onError)
                 this.setState({isFetchingData:true})
             }
         }

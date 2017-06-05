@@ -139,7 +139,7 @@ const getContourConfig=(config, data, onClick)=>{
             },
             tooltip: {
                 formatter: function () {
-                    return `Macro Factor 1: ${this.x/multiplyBy}<br/> Macro Factor 2:${this.y/multiplyBy} <br/> Conditional Expected Loss Rate:${this.point.value}`
+                    return `Macro Factor 1: ${this.point.x/multiplyBy}<br/> Macro Factor 2:${this.y/multiplyBy} <br/> Conditional Expected Loss Rate:${this.point.value}`
                 }
             },
         })

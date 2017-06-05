@@ -232,6 +232,17 @@ def server_static(filepath):
 def serve_html():
     return static_file('index.html', root='build')
 
+
+def getXY(query):
+    xdata=None
+    ydata=None
+    try:
+        xdata=float(query['xdata'])
+        ydata=float(query['ydata'])
+    except:
+        print("exception")
+    return xdata, ydata
+
 @route('/getcontour')
 def contour():
     return {'X':X.tolist(),'Y':Y.tolist(), 'losses':losses.tolist()}
@@ -239,9 +250,9 @@ def contour():
 def conditional():
     global sysRetail, sysWholesale
     histSize, histBins = 100, 10;
-    my_dict=request.query.decode()
-    if my_dict.xdata and my_dict.ydata:
-        selectedPoint = {'Retail': my_dict.xdata, 'Wholesale': my_dict.ydata}    
+    xdata, ydata=getXY(request.query)
+    if xdata and ydata:
+        selectedPoint = {'Retail': xdata, 'Wholesale': ydata}    
     else:
         selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
     selectedPointNP = np.array([[selectedPoint['Retail'], selectedPoint['Wholesale']]]);
@@ -251,9 +262,9 @@ def conditional():
 def user_importance_sampling():
     global sysRetail, sysWholesale
     sigma = .5
-    my_dict=request.query.decode()
-    if my_dict.xdata and my_dict.ydata:
-        selectedPoint = {'Retail': my_dict.xdata, 'Wholesale': my_dict.ydata}    
+    xdata, ydata=getXY(request.query)
+    if xdata and ydata:
+        selectedPoint = {'Retail': xdata, 'Wholesale': ydata}    
     else:
         selectedPoint = {'Retail': sysRetail.mean(), 'Wholesale': sysWholesale.mean()}
     rpoints, rlosses = importance_sample(selectedPoint, sigma = sigma) 
